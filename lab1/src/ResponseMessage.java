@@ -1,4 +1,4 @@
-public class ResponseMessage implements Message {
+public class ResponseMessage extends Message {
     String result;
 
     public ResponseMessage(String result){

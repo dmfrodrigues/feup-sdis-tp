@@ -1,7 +1,15 @@
-public class RegisterMessage implements Message {
+import java.net.InetAddress;
+
+public class RegisterMessage extends RequestMessage {
+    InetAddress from;
     String dns;
     String ip;
     public RegisterMessage(String dns, String ip){
+        this.dns = dns;
+        this.ip = ip;
+    }
+    public RegisterMessage(InetAddress from, String dns, String ip){
+        this.from = from;
         this.dns = dns;
         this.ip = ip;
     }
@@ -10,5 +18,7 @@ public class RegisterMessage implements Message {
         return "REGISTER " + dns + " " + ip;
     }
 
-    public int length() { return this.toString().length(); }
+    public void process(){
+
+    }
 }
