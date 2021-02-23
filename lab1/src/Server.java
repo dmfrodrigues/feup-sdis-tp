@@ -1,12 +1,12 @@
+import javax.xml.crypto.Data;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.ProtocolException;
-import java.net.SocketException;
+import java.net.*;
+import java.util.*;
 
 public class Server {
     static int port;
     static DatagramSocket socket;
+    static Map<String, Inet4Address> table = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         if(args.length != 1){
@@ -35,6 +35,7 @@ public class Server {
     private static void mainLoop() throws IOException {
         while(true){
             RequestMessage message = receiveMessage();
+            System.out.println(message.toString());
             message.process();
         }
     }
@@ -45,17 +46,35 @@ public class Server {
         socket.receive(packet);
 
         String data = new String(packet.getData());
-        System.out.println(data);
 
         String[] data_split = data.split(" ");
         String operation = data_split[0];
         RequestMessage request;
         switch(operation){
-            case "REGISTER": request = new RegisterMessage(packet.getAddress(), data_split[1], data_split[2]); break;
-            case "LOOKUP": request = new LookupMessage(packet.getAddress(), data_split[1]); break;
+            case "REGISTER": request = new RegisterMessage(packet.getAddress(), packet.getPort(), data_split[1], data_split[2]); break;
+            case "LOOKUP": request = new LookupMessage(packet.getAddress(), packet.getPort(), data_split[1]); break;
             default: throw new ProtocolException("Operation " + operation + " not valid");
         }
 
         return request;
+    }
+
+    public static void register(String dns, Inet4Address address){
+        table.put(dns, address);
+    }
+
+    public static Inet4Address lookup(String dns) {
+        Inet4Address address = table.get(dns);
+        if(address == null) throw new NoSuchElementException(dns);
+        else return address;
+    }
+
+    public static int getTableSize() {
+        return table.size();
+    }
+
+    public static void send(ResponseMessage message) throws IOException {
+        DatagramPacket packet = message.toDatagramPacket();
+        socket.send(packet);
     }
 }
