@@ -36,8 +36,6 @@ jobs:
 
     - name: Test
       run: |
-        cd lab1/bin
-        java Server 4040 &
-        sleep 1
-        java Client localhost 4040 register www.fe.up.pt 192.168.0.1
-        java Client localhost 4040 lookup www.fe.up.pt
+        cd lab1
+        chmod u+x test/*.sh
+        test/test1.sh
