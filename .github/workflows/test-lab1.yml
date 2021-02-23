@@ -32,7 +32,7 @@ jobs:
         cd lab1
         mkdir bin
         cd bin
-        javac ../bin/*.java -d .
+        javac ../src/*.java -d .
 
     - name: Test
       run: |
