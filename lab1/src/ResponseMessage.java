@@ -1,13 +1,5 @@
-public class ResponseMessage implements Message {
-    String result;
+import java.net.DatagramPacket;
 
-    public ResponseMessage(String result){
-        this.result = result;
-    }
-
-    public String toString(){
-        return result;
-    }
-
-    public int length() { return result.length();}
+abstract public class ResponseMessage extends Message {
+    abstract public DatagramPacket toDatagramPacket();
 }
