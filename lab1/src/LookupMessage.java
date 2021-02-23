@@ -33,7 +33,9 @@ public class LookupMessage extends RequestMessage {
             this.address = address;
         }
 
-        public String toString(){ return dns + " " + address.toString(); }
+        public String toString(){
+            return dns + " " + address.getHostAddress();
+        }
 
         public DatagramPacket toDatagramPacket(){
             return new DatagramPacket(toString().getBytes(), length(), to, toPort);
