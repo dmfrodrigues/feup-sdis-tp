@@ -32,9 +32,10 @@ public class Client {
             System.exit(1);
         }
 
-        printResult(args, getResponse(socket));
-
+        String response = getResponse(socket);
+        printResult(args, response);
         socket.close();
+        if(response.equals("ERROR")) System.exit(1);
     }
 
     private static void sendRequest(DatagramSocket socket, InetAddress address, int port, Message msg) throws IOException {
