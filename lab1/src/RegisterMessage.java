@@ -9,4 +9,6 @@ public class RegisterMessage implements Message {
     public String toString(){
         return "REGISTER " + dns + " " + ip;
     }
+
+    public int length() { return this.toString().length(); }
 }

@@ -8,4 +8,6 @@ public class ResponseMessage implements Message {
     public String toString(){
         return result;
     }
+
+    public int length() { return result.length();}
 }
