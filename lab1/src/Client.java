@@ -2,6 +2,9 @@ import java.io.IOException;
 import java.net.*;
 
 public class Client {
+
+    private static final int MAX_MSG_LEN = 1024;
+
     public static void main(String[] args) throws IOException {
         if (args.length < 4) {
             System.out.println("Usage: java Client <host> <port> <oper> <opnd>*");
@@ -26,6 +29,8 @@ public class Client {
             System.exit(1);
         }
 
+        printResult(args, getResponse(socket));
+
         socket.close();
     }
 
@@ -34,8 +39,14 @@ public class Client {
         socket.send(packet);
     }
 
-    private static void getResponse(){
-
+    private static String getResponse(DatagramSocket socket) throws IOException {
+        byte[] buffer = new byte[MAX_MSG_LEN];
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+        socket.receive(packet);
+        return new String(packet.getData());
     }
 
+    private static void printResult(String[] args, String response){
+        System.out.println("Client: "+ args[2] + " " + args[3] + args[4] + " : "+ response);
+    }
 }
