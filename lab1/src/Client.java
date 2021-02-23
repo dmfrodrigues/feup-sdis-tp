@@ -8,7 +8,7 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         if (args.length < 4) {
-            printUsage();
+            System.out.println(getUsage());
             System.exit(1);
         }
 
@@ -28,7 +28,7 @@ public class Client {
         }
         else{
             System.out.println("Invalid operation");
-            printUsage();
+            System.out.println(getUsage());
             System.exit(1);
         }
 
@@ -60,8 +60,8 @@ public class Client {
             System.out.println("Client: "+ args[2] + " " + args[3] + " : "+ response);
     }
 
-    private static void printUsage(){
-        System.out.println("Usage: java Client <host> <port> register <DNS name> <IP address>");
-        System.out.println("       java Client <host> <port> lookup <DNS name>");
+    private static String getUsage(){
+        return "Usage: java Client <host> <port> register <DNS name> <IP address>\n" +
+                "       java Client <host> <port> lookup <DNS name>";
     }
 }
