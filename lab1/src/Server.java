@@ -45,7 +45,7 @@ public class Server {
         DatagramPacket packet = new DatagramPacket(buf, buf.length);
         socket.receive(packet);
 
-        String data = new String(packet.getData());
+        String data = new String(packet.getData()).substring(packet.getOffset(), packet.getLength());
 
         String[] data_split = data.split(" ");
         String operation = data_split[0];
