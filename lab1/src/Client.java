@@ -55,7 +55,7 @@ public class Client {
 
     private static void printResult(String[] args, String response){
         if(args[2].equals("register"))
-            System.out.println("Client: "+ args[2] + " " + args[3] + args[4] + " : "+ response);
+            System.out.println("Client: "+ args[2] + " " + args[3] + " " + args[4] + " : "+ response);
         else if(args[2].equals("lookup"))
             System.out.println("Client: "+ args[2] + " " + args[3] + " : "+ response);
     }

@@ -35,7 +35,7 @@ public class Server {
     private static void mainLoop() throws IOException {
         while(true){
             RequestMessage message = receiveMessage();
-            System.out.println(message.toString());
+            System.out.println("Server: " + message.toString());
             message.process();
         }
     }
