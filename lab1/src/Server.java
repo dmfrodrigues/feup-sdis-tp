@@ -63,9 +63,10 @@ public class Server {
         table.put(dns, address);
     }
 
-    public static Inet4Address lookup(String dns) {
+    public static Inet4Address lookup(String dns) throws NoSuchElementException, NullPointerException {
+        if(!table.containsKey(dns)) throw new NoSuchElementException(dns);
         Inet4Address address = table.get(dns);
-        if(address == null) throw new NoSuchElementException(dns);
+        if(address == null) throw new NullPointerException(dns);
         else return address;
     }
 
