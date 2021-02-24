@@ -2,9 +2,14 @@ import java.io.IOException;
 import java.net.*;
 
 public class Client {
-
     private static final int TIMEOUT = 3000;
     private static final int MAX_MSG_LEN = 1024;
+
+    private static InetAddress multicastAddress = null;
+    private static InetAddress serviceAddress = null;
+    private static MulticastSocket multicastSocket = null;
+    private static int multicastPort;
+    private static int servicePort;
 
     public static void main(String[] args) throws IOException {
         if (args.length < 4) {
@@ -12,19 +17,29 @@ public class Client {
             System.exit(1);
         }
 
-        InetAddress host = InetAddress.getByName(args[0]);
-        int port = Integer.parseInt(args[1]);
-        DatagramSocket socket = new DatagramSocket();
+        multicastAddress = InetAddress.getByName(args[0]);
+        multicastPort = Integer.parseInt(args[1]);
+        multicastSocket = new MulticastSocket(multicastPort);
+        multicastSocket.joinGroup(multicastAddress);
+
+        // TODO read service port and address
+
+        // TODO send request
+
+        // TODO  wait response
+
+        /*
+        DatagramSocket socket = new DatagramSocket(servicePort);
         socket.setSoTimeout(TIMEOUT);
 
         if(args[2].equals("register") && args.length == 5)
         {
             RegisterMessage msg = new RegisterMessage(args[3], args[4]);
-            sendRequest(socket, host, port, msg);
+            sendRequest(socket, serviceAddress, servicePort, msg);
         }
         else if(args[2].equals("lookup")){
             LookupMessage msg = new LookupMessage(args[3]);
-            sendRequest(socket, host, port, msg);
+            sendRequest(socket, serviceAddress, servicePort, msg);
         }
         else{
             System.out.println("Invalid operation");
@@ -32,10 +47,12 @@ public class Client {
             System.exit(1);
         }
 
-        String response = getResponse(socket);
+        String response = getResponse(multicastSocket);
         printResult(args, response);
-        socket.close();
         if(response.equals("ERROR")) System.exit(1);
+        */
+        multicastSocket.leaveGroup(multicastAddress);
+        multicastSocket.close();
     }
 
     private static void sendRequest(DatagramSocket socket, InetAddress address, int port, Message msg) throws IOException {
@@ -43,7 +60,7 @@ public class Client {
         socket.send(packet);
     }
 
-    private static String getResponse(DatagramSocket socket) throws IOException {
+    private static String getResponse(MulticastSocket socket) throws IOException {
         byte[] buffer = new byte[MAX_MSG_LEN];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         try {
@@ -62,7 +79,7 @@ public class Client {
     }
 
     private static String getUsage(){
-        return "Usage: java Client <host> <port> register <DNS name> <IP address>\n" +
-                "       java Client <host> <port> lookup <DNS name>";
+        return "Usage: java Client <mcast_addr> <mcast_port> register <DNS name> <IP address>\n" +
+                "       java Client <mcast_addr> <mcast_port> lookup <DNS name>";
     }
 }
