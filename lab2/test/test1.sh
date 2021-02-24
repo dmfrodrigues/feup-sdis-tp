@@ -16,9 +16,9 @@ test () {
 }
 
 cd bin
-timeout $TIMEOUT java Server 4040 > /dev/null & PID=$!
+timeout $TIMEOUT java Server 4040 230.0.0.1 4141 > /dev/null & PID=$!
 echo "Started server with PID $PID"
-sleep 1
+sleep 5
 test "test1-01" "java Client localhost 4040 register www.fe.up.pt 192.168.0.1" "Client: register www.fe.up.pt 192.168.0.1 : 1"
 test "test1-02" "java Client localhost 4040 register www.fe.up.pt 192.168.0.1" "Client: register www.fe.up.pt 192.168.0.1 : 1"
 test "test1-03" "java Client localhost 4040 register www.google.com 123.123.123.123" "Client: register www.google.com 123.123.123.123 : 2"
