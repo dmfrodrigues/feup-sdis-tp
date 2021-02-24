@@ -7,7 +7,7 @@
 ### Food for thought
 
 - **Q:** How can you prevent the client from hanging indefinitely in case of failure of the server or of lost messages?
-- **A:** 
+- **A:** The client prevents it by using a socket timeout, which is a designated amount of time the client will be waiting for the server's response. If timeout is exceeded, an exception is thrown, and the program exits with an error code.
 
 - **Q:** Is this a problem for the server?
 - **A:** This is not a problem for the server, because the server runs indefinitely, and failure is ignored so that it is the client that is responsible to repeat the request if it does not receive a response.
