@@ -1,6 +1,7 @@
 import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 
@@ -43,18 +44,18 @@ public class RegisterMessage extends RequestMessage {
         }
     }
 
-    public void process(){
+    public void process(Server.WorkRunnable workRunnable){
         int result = -1;
         try {
             Inet4Address address = (Inet4Address)Inet4Address.getByName(ip);
-            Server.register(dns, address);
-            result = Server.getTableSize();
+            workRunnable.register(dns, address);
+            result = workRunnable.getTableSize();
         } catch(Exception e){
             result = -1;
         } finally {
             ResponseMessage response = new Response(from, fromPort, result);
             try {
-                Server.send(response);
+                workRunnable.send(response);
             } catch (IOException e) {
                 System.err.println("Failed to send response "+response.toString());
             }
