@@ -16,7 +16,7 @@ test () {
 }
 
 cd bin
-timeout $TIMEOUT java Server 4040 230.0.0.1 4141 & PID=$!
+timeout $TIMEOUT java Server 4040 $1 4141 & PID=$!
 echo "Started server with PID $PID"
 sleep 3
 test "test1-01" "java Client localhost 4040 register www.fe.up.pt 192.168.0.1" "Client: register www.fe.up.pt 192.168.0.1 : 1"
