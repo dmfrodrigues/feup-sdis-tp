@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-TIMEOUT=30
+TIMEOUT=10
 
 test () {
     echo -en "$1\t"
@@ -16,9 +16,9 @@ test () {
 }
 
 cd bin
-timeout $TIMEOUT java Server 4040 230.0.0.1 4141 > /dev/null & PID=$!
+timeout $TIMEOUT java Server 4040 230.0.0.1 4141 & PID=$!
 echo "Started server with PID $PID"
-sleep 5
+sleep 3
 test "test1-01" "java Client localhost 4040 register www.fe.up.pt 192.168.0.1" "Client: register www.fe.up.pt 192.168.0.1 : 1"
 test "test1-02" "java Client localhost 4040 register www.fe.up.pt 192.168.0.1" "Client: register www.fe.up.pt 192.168.0.1 : 1"
 test "test1-03" "java Client localhost 4040 register www.google.com 123.123.123.123" "Client: register www.google.com 123.123.123.123 : 2"
