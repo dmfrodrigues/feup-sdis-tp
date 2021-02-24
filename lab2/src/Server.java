@@ -137,8 +137,8 @@ public class Server {
             DatagramPacket packet = new DatagramPacket(serviceMessage.toString().getBytes(), serviceMessage.length(), multicastAddress, multicastPort);
             System.out.println(
                     "multicast: " +
-                    multicastAddress.getHostAddress() + " " + String.valueOf(multicastPort) + ": " +
-                    serviceMessage.getAddress().getHostAddress() + " " + String.valueOf(serviceMessage.getPort())
+                    multicastAddress.getHostAddress() + " " + multicastPort + ": " +
+                    serviceMessage.getAddress().getHostAddress() + " " + serviceMessage.getPort()
             );
             socket.send(packet);
         }
