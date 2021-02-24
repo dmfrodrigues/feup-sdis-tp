@@ -19,9 +19,9 @@ public class Server {
 
         DatagramSocket socket = new DatagramSocket(port, InetAddress.getLocalHost());
 
-        ServiceRunnable serviceRunnable = new ServiceRunnable(socket, multicastAddress, multicastPort);
-        Thread serviceThread = new Thread(serviceRunnable, "service");
-        serviceThread.start();
+        ServiceTask serviceTask = new ServiceTask(socket, multicastAddress, multicastPort);
+        Timer serviceTimer = new Timer("service");
+        serviceTimer.schedule(serviceTask, 0, ServiceTask.period);
 
         WorkRunnable workRunnable = new WorkRunnable(socket);
         workRunnable.run();
@@ -101,16 +101,16 @@ public class Server {
         }
     }
 
-    private static class ServiceRunnable implements Runnable {
+    private static class ServiceTask extends TimerTask {
         /// @brief Time between broadcasts, in milliseconds.
-        private final static int timeBetweenBroadcasts = 1000;
+        public final static int period = 1000;
 
         private final InetAddress multicastAddress;
         private final int multicastPort;
         private final DatagramSocket socket;
         private final ServiceMessage serviceMessage;
 
-        public ServiceRunnable(DatagramSocket socket, InetAddress multicastAddress, int multicastPort){
+        public ServiceTask(DatagramSocket socket, InetAddress multicastAddress, int multicastPort){
             this.socket = socket;
             this.multicastAddress = multicastAddress;
             this.multicastPort = multicastPort;
@@ -118,18 +118,11 @@ public class Server {
         }
 
         public void run(){
-            while(true){
-                try {
-                    sleep(timeBetweenBroadcasts);
-                } catch (InterruptedException e) {
-                }
-
-                try {
-                    broadcastSocket();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return;
-                }
+            try {
+                broadcastSocket();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
             }
         }
 
