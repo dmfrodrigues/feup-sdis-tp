@@ -7,4 +7,4 @@
 ### Question
 
 - **Q:** What are the advantages of the server broadcasting the socket address/port, compared to that used in the previous lab?
-- **A:**
+- **A:** The advantage is that the server does not need to be at a fixed IP address or use a fixed port, as any computer in the local network that wants to use the service can listen to the hardcoded multicast group and check the address through which the server can be accessed.
