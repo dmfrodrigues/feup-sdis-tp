@@ -9,6 +9,7 @@ MCAST_PORT=4141
 test () {
     echo -en "$1\t"
     output=$($2)
+    echo $output
     if [ "$output" == "$3" ]; then
         echo -e "\e[1m\e[32m[Passed]\e[0m"
     else
