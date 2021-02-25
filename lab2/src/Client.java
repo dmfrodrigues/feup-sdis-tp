@@ -61,7 +61,6 @@ public class Client {
     }
 
     private static boolean joinGroup() throws IOException {
-        printStatus("Joining group");
         try {
             multicastSocket.joinGroup(multicastAddress);
         }catch (SocketException e){
@@ -73,7 +72,6 @@ public class Client {
 
     private static void receiveServiceMessage() throws IOException {
         byte[] buffer = new byte[MAX_MSG_LEN];
-        printStatus("Waiting for service message");
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         multicastSocket.receive(packet);
         String received = new String(packet.getData(), 0, packet.getLength());
@@ -103,7 +101,6 @@ public class Client {
                 serviceMessage.getAddress(), serviceMessage.getPort());
 
         socket.send(packet);
-        printStatus("Sent request");
     }
 
     private static String getResponse(DatagramSocket socket) throws IOException {
