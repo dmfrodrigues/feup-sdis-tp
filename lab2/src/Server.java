@@ -17,7 +17,7 @@ public class Server {
         InetAddress multicastAddress = InetAddress.getByName(args[1]);
         int         multicastPort    = Integer.parseInt(args[2]);
 
-        DatagramSocket socket = new DatagramSocket(port);
+        DatagramSocket socket = new DatagramSocket(port, InetAddress.getLocalHost());
 
         ServiceTask serviceTask = new ServiceTask(socket, multicastAddress, multicastPort);
         Timer serviceTimer = new Timer("service");
