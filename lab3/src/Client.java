@@ -2,11 +2,16 @@ import java.io.IOException;
 import java.net.*;
 
 public class Client {
-
     private static final int TIMEOUT = 3000;
     private static final int MAX_MSG_LEN = 1024;
+    private static String hostname;
+    private static String remoteObjName;
+    private static String operation;
+    private static String dnsName;
+    private static String ipAddress;
 
     public static void main(String[] args) throws IOException {
+        /*
         if (args.length < 4) {
             System.out.println(getUsage());
             System.exit(1);
@@ -36,6 +41,28 @@ public class Client {
         printResult(args, response);
         socket.close();
         if(response.equals("ERROR")) System.exit(1);
+         */
+    }
+
+    private static boolean parseArgs(String[] args) throws UnknownHostException {
+        if(args.length != 4 && args.length != 5) return false;
+
+        hostname = args[0];
+        remoteObjName = args[1];
+        operation = args[2];
+
+        if(operation.equals("register") && args.length == 5){
+            dnsName = args[3];
+            ipAddress = args[4];
+        }
+        else if(operation.equals("lookup"))
+            dnsName = args[3];
+        else{
+            System.out.println("Invalid operation");
+            return false;
+        }
+
+        return true;
     }
 
     private static void sendRequest(DatagramSocket socket, InetAddress address, int port, Message msg) throws IOException {
@@ -62,7 +89,7 @@ public class Client {
     }
 
     private static String getUsage(){
-        return "Usage: java Client <host> <port> register <DNS name> <IP address>\n" +
-                "       java Client <host> <port> lookup <DNS name>";
+        return "Usage: java Client <host_name> <remote_object_name> register <DNS name> <IP address>\n" +
+                "       java Client <host_name> <remote_object_name> lookup <DNS name>";
     }
 }
