@@ -1,3 +1,3 @@
 abstract class RequestMessage extends Message {
-    abstract void process();
+    abstract void process(Server.WorkRunnable workRunnable);
 }

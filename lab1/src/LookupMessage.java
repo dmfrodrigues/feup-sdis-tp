@@ -42,19 +42,19 @@ public class LookupMessage extends RequestMessage {
         }
     }
 
-    public void process(){
+    public void process(Server.WorkRunnable workRunnable){
         Inet4Address address;
         try {
-            address = Server.lookup(dns);
+            address = workRunnable.lookup(dns);
         } catch(NoSuchElementException e) {
             System.err.println("No such entry " + dns + " in table");
             return;
         }
         ResponseMessage response = new LookupMessage.Response(from, fromPort, dns, address);
         try {
-            Server.send(response);
+            workRunnable.send(response);
         } catch (IOException e) {
-            System.err.println("Failed to send response "+response.toString());
+            System.err.println("Failed to send response "+response);
         }
     }
 }
