@@ -54,7 +54,7 @@ public class LookupMessage extends RequestMessage {
         try {
             workRunnable.send(response);
         } catch (IOException e) {
-            System.err.println("Failed to send response "+response);
+            System.err.println("Failed to send response "+response.toString());
         }
     }
 }
