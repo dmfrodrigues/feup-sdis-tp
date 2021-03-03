@@ -1,27 +1,31 @@
 import java.io.IOException;
 import java.net.*;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 public class Client {
     private static final int TIMEOUT = 3000;
     private static final int MAX_MSG_LEN = 1024;
-    private static String hostname;
+    private static String host;
     private static String remoteObjName;
     private static String operation;
     private static String dnsName;
     private static String ipAddress;
 
     public static void main(String[] args) throws IOException {
-        /*
-        if (args.length < 4) {
+
+        if (!parseArgs(args)) {
             System.out.println(getUsage());
             System.exit(1);
         }
 
-        InetAddress host = InetAddress.getByName(args[0]);
-        int port = Integer.parseInt(args[1]);
         DatagramSocket socket = new DatagramSocket();
         socket.setSoTimeout(TIMEOUT);
 
+        Registry registry = LocateRegistry.getRegistry(host);
+
+
+        /*
         if(args[2].equals("register") && args.length == 5)
         {
             RegisterMessage msg = new RegisterMessage(args[3], args[4]);
@@ -47,7 +51,7 @@ public class Client {
     private static boolean parseArgs(String[] args) throws UnknownHostException {
         if(args.length != 4 && args.length != 5) return false;
 
-        hostname = args[0];
+        host = args[0];
         remoteObjName = args[1];
         operation = args[2];
 
