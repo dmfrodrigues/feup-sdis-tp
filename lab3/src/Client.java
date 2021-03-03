@@ -46,6 +46,7 @@ public class Client {
         if(operation.equals("register") && args.length == 5){
             dnsName = args[3];
             ipAddress = (Inet4Address) InetAddress.getByName(args[4]);
+
         }
         else if(operation.equals("lookup"))
             dnsName = args[3];
@@ -58,7 +59,7 @@ public class Client {
 
     private static void printStatus(String status){
         if(operation.equals("register"))
-            System.out.println("Client: "+ operation + " " + dnsName + " " + ipAddress + " : " + status);
+            System.out.println("Client: "+ operation + " " + dnsName + " " + ipAddress.getHostAddress() + " : " + status);
         else if(operation.equals("lookup"))
             System.out.println("Client: "+ operation + " " + dnsName + " : " + status);
     }
