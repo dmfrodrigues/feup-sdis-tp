@@ -1,75 +1,57 @@
 import java.io.IOException;
 import java.net.*;
+import java.rmi.AlreadyBoundException;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
 public class Server {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, AlreadyBoundException {
         if(args.length != 1){
             System.out.println("ERROR: not enough arguments");
             System.out.print(getUsage());
             return;
         }
 
-        int         port             = Integer.parseInt(args[0]);
-
-        DatagramSocket socket = new DatagramSocket(port);
-
-        WorkRunnable workRunnable = new WorkRunnable(socket);
-        workRunnable.run();
+        String remote_obj_name = args[0];
+        WorkImplementation.createRemoteObj(remote_obj_name);
     }
 
     private static String getUsage(){
         return
             "Usage:\n"+
-            "    java Server PORT\n"+
-            "    PORT   Port number that the server shall use to provide the service\n"
+            "    java Server REMOTE_OBJ_NAME\n"+
+            "    REMOTE_OBJ_NAME    Remote object name\n"
         ;
     }
 
-    public static class WorkRunnable implements Runnable {
-        private final DatagramSocket socket;
+    public interface WorkInterface extends Remote {
+        int register(String dns, Inet4Address address) throws RemoteException;
+
+        Inet4Address lookup(String dns) throws NoSuchElementException, NullPointerException, RemoteException;
+    }
+
+    public static class WorkImplementation implements WorkInterface {
+        public static void createRemoteObj(String remote_obj_name) throws RemoteException, AlreadyBoundException {
+            WorkImplementation obj = new WorkImplementation();
+            WorkInterface stub = (WorkInterface) UnicastRemoteObject.exportObject(obj, 0);
+
+            Registry registry = LocateRegistry.getRegistry();
+            registry.bind(remote_obj_name, stub);
+        }
+
         private final Map<String, Inet4Address> table = new HashMap<>();
 
-        public WorkRunnable(DatagramSocket socket){
-            this.socket = socket;
+        public WorkImplementation() {
         }
 
-        @Override
-        public void run() {
-            while(true){
-                RequestMessage message;
-                try {
-                    message = receiveMessage();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return;
-                }
-                System.out.println("Server: " + message.toString());
-                message.process(this);
-            }
-        }
-
-        private RequestMessage receiveMessage() throws IOException {
-            byte[] buf = new byte[256];
-            DatagramPacket packet = new DatagramPacket(buf, buf.length);
-            socket.receive(packet);
-
-            String data = new String(packet.getData()).substring(packet.getOffset(), packet.getLength());
-
-            String[] data_split = data.split(" ");
-            String operation = data_split[0];
-            RequestMessage request = switch (operation) {
-                case "REGISTER" -> new RegisterMessage(packet.getAddress(), packet.getPort(), data_split[1], data_split[2]);
-                case "LOOKUP" -> new LookupMessage(packet.getAddress(), packet.getPort(), data_split[1]);
-                default -> throw new ProtocolException("Operation " + operation + " not valid");
-            };
-
-            return request;
-        }
-
-        public void register(String dns, Inet4Address address){
+        public int register(String dns, Inet4Address address){
             table.put(dns, address);
+            return getTableSize();
         }
 
         public Inet4Address lookup(String dns) throws NoSuchElementException, NullPointerException {
@@ -81,11 +63,6 @@ public class Server {
 
         public int getTableSize() {
             return table.size();
-        }
-
-        public void send(ResponseMessage message) throws IOException {
-            DatagramPacket packet = message.toDatagramPacket();
-            socket.send(packet);
         }
     }
 }
