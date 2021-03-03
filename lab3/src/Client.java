@@ -61,7 +61,7 @@ public class Client {
         if(operation.equals("register"))
             System.out.println("Client: "+ operation + " " + dnsName + " " + ipAddress.getHostAddress() + " : " + status);
         else if(operation.equals("lookup"))
-            System.out.println("Client: "+ operation + " " + dnsName + " : " + status);
+            System.out.println("Client: "+ operation + " " + dnsName + " : " + dnsName + " " + status);
     }
 
     private static String getUsage(){

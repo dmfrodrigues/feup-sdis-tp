@@ -10,6 +10,11 @@ test () {
         echo -e "\e[1m\e[32m[Passed]\e[0m"
     else
         echo -e "\e[1m\e[31m[Failed]\e[0m"
+        echo "Ran: $1"
+        echo "Expected:"
+        echo "$2"
+        echo "Got:"
+        echo "$output"
         kill $PID
         exit 1
     fi
