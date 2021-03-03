@@ -24,7 +24,7 @@ public class Client {
                     response = Integer.toString(stub.register(dnsName, ipAddress));
                     break;
                 case "lookup":
-                    response = stub.lookup(dnsName).toString();
+                    response = stub.lookup(dnsName).getHostAddress();
                     break;
                 default:
                     break;
