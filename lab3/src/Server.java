@@ -50,11 +50,13 @@ public class Server {
         }
 
         public int register(String dns, Inet4Address address){
+            this.log("REGISTER " + dns + " " + address.getHostAddress());
             table.put(dns, address);
             return getTableSize();
         }
 
         public Inet4Address lookup(String dns) throws NoSuchElementException, NullPointerException {
+            this.log("LOOKUP " + dns);
             if(!table.containsKey(dns)) throw new NoSuchElementException(dns);
             Inet4Address address = table.get(dns);
             if(address == null) throw new NullPointerException(dns);
@@ -63,6 +65,10 @@ public class Server {
 
         public int getTableSize() {
             return table.size();
+        }
+
+        private void log(String message){
+            System.out.println("Server: " + message);
         }
     }
 }
