@@ -21,10 +21,10 @@ public class Client {
             Server.WorkInterface stub = (Server.WorkInterface) registry.lookup(remoteObjName);
             switch (operation){
                 case "register":
-                    response = stub.lookup(dnsName).toString();
+                    response = Integer.toString(stub.register(dnsName, ipAddress));
                     break;
                 case "lookup":
-                    response = Integer.toString(stub.register(dnsName, ipAddress));
+                    response = stub.lookup(dnsName).toString();
                     break;
                 default:
                     break;
