@@ -1,5 +1,8 @@
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.*;
+import java.util.Arrays;
 
 public class Client {
 
@@ -14,7 +17,7 @@ public class Client {
 
         InetAddress host = InetAddress.getByName(args[0]);
         int port = Integer.parseInt(args[1]);
-        DatagramSocket socket = new DatagramSocket();
+        Socket socket = new Socket(host, port);
         socket.setSoTimeout(TIMEOUT);
 
         if(args[2].equals("register") && args.length == 5)
@@ -38,20 +41,18 @@ public class Client {
         if(response.equals("ERROR")) System.exit(1);
     }
 
-    private static void sendRequest(DatagramSocket socket, InetAddress address, int port, Message msg) throws IOException {
-        DatagramPacket packet = new DatagramPacket(msg.toString().getBytes(), msg.length(), address, port);
-        socket.send(packet);
+    private static void sendRequest(Socket socket, InetAddress address, int port, Message msg) throws IOException {
+        OutputStream os = socket.getOutputStream();
+        os.write(msg.toString().getBytes());
     }
 
-    private static String getResponse(DatagramSocket socket) throws IOException {
-        byte[] buffer = new byte[MAX_MSG_LEN];
-        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+    private static String getResponse(Socket socket) throws IOException {
         try {
-            socket.receive(packet);
+            InputStream is = socket.getInputStream();
+            return Arrays.toString(is.readAllBytes());
         } catch (SocketTimeoutException e) {
             return "ERROR";
         }
-        return new String(packet.getData());
     }
 
     private static void printResult(String[] args, String response){

@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.*;
 import java.util.*;
 
@@ -13,7 +15,7 @@ public class Server {
 
         int         port             = Integer.parseInt(args[0]);
 
-        DatagramSocket socket = new DatagramSocket(port);
+        ServerSocket socket = new ServerSocket(port);
 
         WorkRunnable workRunnable = new WorkRunnable(socket);
         workRunnable.run();
@@ -28,11 +30,11 @@ public class Server {
     }
 
     public static class WorkRunnable implements Runnable {
-        private final DatagramSocket socket;
+        private final ServerSocket serverSocket;
         private final Map<String, Inet4Address> table = new HashMap<>();
 
-        public WorkRunnable(DatagramSocket socket){
-            this.socket = socket;
+        public WorkRunnable(ServerSocket serverSocket){
+            this.serverSocket = serverSocket;
         }
 
         @Override
@@ -40,32 +42,30 @@ public class Server {
             while(true){
                 RequestMessage message;
                 try {
-                    message = receiveMessage();
+                    processMessage();
                 } catch (IOException e) {
                     e.printStackTrace();
                     return;
                 }
-                System.out.println("Server: " + message.toString());
-                message.process(this);
             }
         }
 
-        private RequestMessage receiveMessage() throws IOException {
-            byte[] buf = new byte[256];
-            DatagramPacket packet = new DatagramPacket(buf, buf.length);
-            socket.receive(packet);
+        private void processMessage() throws IOException {
+            Socket socket = serverSocket.accept();
 
-            String data = new String(packet.getData()).substring(packet.getOffset(), packet.getLength());
+            InputStream is = socket.getInputStream();
+            String data = String.valueOf(is.readAllBytes());
 
             String[] data_split = data.split(" ");
             String operation = data_split[0];
             RequestMessage request = switch (operation) {
-                case "REGISTER" -> new RegisterMessage(packet.getAddress(), packet.getPort(), data_split[1], data_split[2]);
-                case "LOOKUP" -> new LookupMessage(packet.getAddress(), packet.getPort(), data_split[1]);
+                case "REGISTER" -> new RegisterMessage(data_split[1], data_split[2]);
+                case "LOOKUP" -> new LookupMessage(data_split[1]);
                 default -> throw new ProtocolException("Operation " + operation + " not valid");
             };
 
-            return request;
+            System.out.println("Server: " + request.toString());
+            request.process(this, socket);
         }
 
         public void register(String dns, Inet4Address address){
@@ -83,9 +83,9 @@ public class Server {
             return table.size();
         }
 
-        public void send(ResponseMessage message) throws IOException {
-            DatagramPacket packet = message.toDatagramPacket();
-            socket.send(packet);
+        public void send(ResponseMessage message, Socket socket) throws IOException {
+            OutputStream os = socket.getOutputStream();
+            os.write(message.toString().getBytes());
         }
     }
 }

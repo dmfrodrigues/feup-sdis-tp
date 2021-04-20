@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.Socket;
 
 public class RegisterMessage extends RequestMessage {
     InetAddress from;
@@ -42,7 +43,7 @@ public class RegisterMessage extends RequestMessage {
         }
     }
 
-    public void process(Server.WorkRunnable workRunnable){
+    public void process(Server.WorkRunnable workRunnable, Socket socket){
         int result = -1;
         try {
             Inet4Address address = (Inet4Address)Inet4Address.getByName(ip);
@@ -52,7 +53,7 @@ public class RegisterMessage extends RequestMessage {
         } finally {
             ResponseMessage response = new Response(from, fromPort, result);
             try {
-                workRunnable.send(response);
+                workRunnable.send(response, socket);
             } catch (IOException e) {
                 System.err.println("Failed to send response "+response);
             }

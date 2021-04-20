@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.util.NoSuchElementException;
 
 public class LookupMessage extends RequestMessage {
@@ -42,7 +43,7 @@ public class LookupMessage extends RequestMessage {
         }
     }
 
-    public void process(Server.WorkRunnable workRunnable){
+    public void process(Server.WorkRunnable workRunnable, Socket socket){
         Inet4Address address;
         try {
             address = workRunnable.lookup(dns);
@@ -52,7 +53,7 @@ public class LookupMessage extends RequestMessage {
         }
         ResponseMessage response = new LookupMessage.Response(from, fromPort, dns, address);
         try {
-            workRunnable.send(response);
+            workRunnable.send(response, socket);
         } catch (IOException e) {
             System.err.println("Failed to send response "+response);
         }
