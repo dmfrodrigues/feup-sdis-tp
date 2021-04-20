@@ -85,6 +85,7 @@ public class Server {
         public void send(ResponseMessage message, Socket socket) throws IOException {
             OutputStream os = socket.getOutputStream();
             os.write(message.toString().getBytes());
+            os.flush();
         }
     }
 }

@@ -44,6 +44,7 @@ public class Client {
     private static void sendRequest(Socket socket, InetAddress address, int port, Message msg) throws IOException {
         OutputStream os = socket.getOutputStream();
         os.write(msg.toString().getBytes());
+        os.flush();
     }
 
     private static String getResponse(Socket socket) throws IOException {
