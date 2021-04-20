@@ -1,6 +1,4 @@
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.*;
 import java.util.*;
 
@@ -53,7 +51,8 @@ public class Server {
             Socket socket = serverSocket.accept();
 
             InputStream is = socket.getInputStream();
-            String data = new String(is.readAllBytes());
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+            String data = bufferedReader.readLine();
 
             String[] data_split = data.split(" ");
             String operation = data_split[0];
@@ -84,7 +83,7 @@ public class Server {
 
         public void send(ResponseMessage message, Socket socket) throws IOException {
             OutputStream os = socket.getOutputStream();
-            os.write(message.toString().getBytes());
+            os.write((message.toString() + '\n').getBytes());
             os.flush();
         }
     }

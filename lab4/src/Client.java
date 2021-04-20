@@ -1,6 +1,4 @@
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.*;
 import java.util.Arrays;
 
@@ -43,14 +41,15 @@ public class Client {
 
     private static void sendRequest(Socket socket, InetAddress address, int port, Message msg) throws IOException {
         OutputStream os = socket.getOutputStream();
-        os.write(msg.toString().getBytes());
+        os.write((msg.toString() + '\n').getBytes());
         os.flush();
     }
 
     private static String getResponse(Socket socket) throws IOException {
         try {
             InputStream is = socket.getInputStream();
-            return Arrays.toString(is.readAllBytes());
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
+            return bufferedReader.readLine();
         } catch (SocketTimeoutException e) {
             return "ERROR";
         }
