@@ -40,7 +40,6 @@ public class Server {
         @Override
         public void run() {
             while(true){
-                RequestMessage message;
                 try {
                     processMessage();
                 } catch (IOException e) {
@@ -54,7 +53,7 @@ public class Server {
             Socket socket = serverSocket.accept();
 
             InputStream is = socket.getInputStream();
-            String data = String.valueOf(is.readAllBytes());
+            String data = new String(is.readAllBytes());
 
             String[] data_split = data.split(" ");
             String operation = data_split[0];

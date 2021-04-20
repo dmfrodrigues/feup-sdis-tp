@@ -5,14 +5,21 @@ TIMEOUT=30
 
 test () {
     echo -en "$1\t"
+    expected=$3
     output=$($2)
-    if [ "$output" == "$3" ]; then
-        echo -e "\e[1m\e[32m[Passed]\e[0m"
-    else
-        echo -e "\e[1m\e[31m[Failed]\e[0m"
+    if [ $? != 0 ]; then
+        echo -e "\e[1m\e[31m[Failed]\e[0m: return code is not zero"
         kill $PID
         exit 1
     fi
+    echo $expected > expected.txt
+    echo $output > output.txt
+    if ! diff expected.txt output.txt > /dev/null ; then
+        echo -e "\e[1m\e[31m[Failed]\e[0m: expected different from output"
+        kill $PID
+        exit 1
+    fi
+    echo -e "\e[1m\e[32m[Passed]\e[0m"
 }
 
 cd bin
