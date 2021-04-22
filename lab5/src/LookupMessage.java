@@ -43,7 +43,7 @@ public class LookupMessage extends RequestMessage {
         }
     }
 
-    public void process(Server.WorkRunnable workRunnable, Socket socket){
+    public void process(SSLServer.WorkRunnable workRunnable, Socket socket){
         Inet4Address address;
         try {
             address = workRunnable.lookup(dns);

@@ -43,7 +43,7 @@ public class RegisterMessage extends RequestMessage {
         }
     }
 
-    public void process(Server.WorkRunnable workRunnable, Socket socket){
+    public void process(SSLServer.WorkRunnable workRunnable, Socket socket){
         int result = -1;
         try {
             Inet4Address address = (Inet4Address)Inet4Address.getByName(ip);

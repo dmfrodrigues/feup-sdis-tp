@@ -5,10 +5,10 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class Server {
+public class SSLServer {
 
     public static void main(String[] args) throws IOException {
-        if(args.length >= 1){
+        if(args.length < 1){
             System.out.println("ERROR: not enough arguments");
             System.out.print(getUsage());
             return;
@@ -21,10 +21,11 @@ public class Server {
 
         try {
             socket = (SSLServerSocket) ssf.createServerSocket(port);
+            socket.setNeedClientAuth(true);
+            socket.setEnabledCipherSuites(getCypherSuites(args));
         }
         catch( IOException e) {
-            System.err.println("Failed to create SSLServerSocket");
-            e.getMessage();
+            System.err.println("Failed to create SSLServerSocket: " + e.getMessage());
             return;
         }
 
@@ -32,10 +33,16 @@ public class Server {
         workRunnable.run();
     }
 
+    private static String[] getCypherSuites(String[] args){
+        List<String> cyphers = new ArrayList<>(Arrays.asList(Arrays.copyOfRange(args, 1, args.length)));
+        System.out.println(cyphers);
+        return cyphers.toArray(new String[0]);
+    }
+
     private static String getUsage(){
         return
             "Usage:\n"+
-            "    java Server PORT [CYPHER-SUITE]*\n"+
+            "    java SSLServer PORT [CYPHER-SUITE]*\n"+
             "    PORT            Port number that the server shall use to provide the service\n"+
             "    [CYPHER-SUITE]* Sequence of strings specifying the combination of cryptographic algorithms the server should use, in order of preference\n"
         ;
