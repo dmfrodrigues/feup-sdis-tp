@@ -3,12 +3,12 @@ set -e
 
 TIMEOUT=30
 KEYSTORE_PASSWORD="123456"
-TRUSTSTORE_PATH="../test/truststore"
+TRUSTSTORE_PATH="truststore"
 TRUSTSTORE_PASSWORD="123456"
-SERVER_KEYS_PATH="../test/server.keys"
-CLIENT_KEYS_PATH="../test/client.keys"
+SERVER_KEYS_PATH="server.keys"
+CLIENT_KEYS_PATH="client.keys"
 SERVER_KEYS="-Djavax.net.debug=ssl,keymanager -Djavax.net.ssl.keyStore=$SERVER_KEYS_PATH -Djavax.net.ssl.keyStorePassword=$KEYSTORE_PASSWORD -Djavax.net.ssl.trustStore=$TRUSTSTORE_PATH -Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PASSWORD"
-CLIENT_KEYS=                                 "-Djavax.net.ssl.keyStore=$CLIENT_KEYS_PATH -Djavax.net.ssl.keyStorePassword=$KEYSTORE_PASSWORD -Djavax.net.ssl.trustStore=$TRUSTSTORE_PATH -Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PASSWORD"
+CLIENT_KEYS="-Djavax.net.ssl.keyStore=$CLIENT_KEYS_PATH -Djavax.net.ssl.keyStorePassword=$KEYSTORE_PASSWORD -Djavax.net.ssl.trustStore=$TRUSTSTORE_PATH -Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PASSWORD"
 CYPHERS="TLS_RSA_WITH_AES_128_CBC_SHA"
 
 test () {
