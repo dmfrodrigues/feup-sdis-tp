@@ -3,10 +3,10 @@ set -e
 
 TIMEOUT=30
 KEYSTORE_PASSWORD="123456"
-TRUSTSTORE_PATH="truststore"
+TRUSTSTORE_PATH="../test/truststore"
 TRUSTSTORE_PASSWORD="123456"
-SERVER_KEYS_PATH="server.keys"
-CLIENT_KEYS_PATH="client.keys"
+SERVER_KEYS_PATH="../test/server.keys"
+CLIENT_KEYS_PATH="../test/client.keys"
 SERVER_KEYS="-Djavax.net.debug=ssl,keymanager -Djavax.net.ssl.keyStore=$SERVER_KEYS_PATH -Djavax.net.ssl.keyStorePassword=$KEYSTORE_PASSWORD -Djavax.net.ssl.trustStore=$TRUSTSTORE_PATH -Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PASSWORD"
 CLIENT_KEYS="-Djavax.net.ssl.keyStore=$CLIENT_KEYS_PATH -Djavax.net.ssl.keyStorePassword=$KEYSTORE_PASSWORD -Djavax.net.ssl.trustStore=$TRUSTSTORE_PATH -Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PASSWORD"
 CYPHERS="TLS_RSA_WITH_AES_128_CBC_SHA"
@@ -43,3 +43,4 @@ test "test1-06" "java $CLIENT_KEYS SSLClient localhost 4040 lookup www.fe.up.pt 
 test "test1-07" "java $CLIENT_KEYS SSLClient localhost 4040 lookup www.fe.up.pt $CYPHERS" "SSLClient: lookup www.fe.up.pt : www.fe.up.pt 192.168.0.1"
 test "test1-08" "java $CLIENT_KEYS SSLClient localhost 4040 lookup www.google.com $CYPHERS" "SSLClient: lookup www.google.com : www.google.com 123.123.123.123"
 test "test1-09" "java $CLIENT_KEYS SSLClient localhost 4040 lookup web.fe.up.pt $CYPHERS" "SSLClient: lookup web.fe.up.pt : web.fe.up.pt 128.128.128.128"
+kill $PID
