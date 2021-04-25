@@ -12,7 +12,7 @@ CLIENT_KEYS="-Djavax.net.ssl.keyStore=$CLIENT_KEYS_PATH -Djavax.net.ssl.keyStore
 CYPHERS="TLS_RSA_WITH_AES_128_CBC_SHA"
 
 test () {
-    echo -en "$1 ($2)\t"
+    echo -en "$1\t"
     expected=$3
     output=$($2)
     if [ $? != 0 ]; then
