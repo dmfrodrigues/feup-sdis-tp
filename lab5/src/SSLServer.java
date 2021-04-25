@@ -72,7 +72,7 @@ public class SSLServer {
 
             InputStream is = socket.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
-            String data;
+            String data = null;
             try {
                 data = bufferedReader.readLine();
             } catch (IOException e) {
