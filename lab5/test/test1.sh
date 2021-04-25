@@ -9,7 +9,7 @@ SERVER_KEYS_PATH="../test/server.keys"
 CLIENT_KEYS_PATH="../test/client.keys"
 SERVER_KEYS="-Djavax.net.debug=ssl,keymanager -Djavax.net.ssl.keyStore=$SERVER_KEYS_PATH -Djavax.net.ssl.keyStorePassword=$KEYSTORE_PASSWORD -Djavax.net.ssl.trustStore=$TRUSTSTORE_PATH -Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PASSWORD"
 CLIENT_KEYS="-Djavax.net.ssl.keyStore=$CLIENT_KEYS_PATH -Djavax.net.ssl.keyStorePassword=$KEYSTORE_PASSWORD -Djavax.net.ssl.trustStore=$TRUSTSTORE_PATH -Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PASSWORD"
-CYPHERS="TLS_RSA_WITH_AES_128_CBC_SHA"
+CYPHERS="SSL_RSA_WITH_RC4_256_SHA"
 
 test () {
     echo -en "$1\t"
@@ -31,7 +31,7 @@ test () {
 }
 
 cd bin
-timeout $TIMEOUT java "$SERVER_KEYS" SSLServer 4040 "$CYPHERS" > /dev/null & PID=$!
+timeout $TIMEOUT java $SERVER_KEYS SSLServer 4040 "$CYPHERS" > /dev/null & PID=$!
 echo "Started server with PID $PID"
 sleep 1
 test "test1-01" "java $CLIENT_KEYS SSLClient localhost 4040 register www.fe.up.pt 192.168.0.1 $CYPHERS" "SSLClient: register www.fe.up.pt 192.168.0.1 : 1"
