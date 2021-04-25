@@ -1,6 +1,5 @@
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSocket;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -69,7 +68,7 @@ public class SSLServer {
         }
 
         private void processMessage() throws IOException {
-            SSLSocket socket = (SSLSocket) serverSocket.accept();
+            Socket socket = serverSocket.accept();
 
             InputStream is = socket.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
