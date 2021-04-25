@@ -2,12 +2,17 @@
 set -e
 
 TIMEOUT=30
-SERVER_KEYS="-Djavax.net.debug=ssl,keymanager -Djavax.net.ssl.keyStore=../test/server.keys -Djavax.net.ssl.keyStorePassword=123456 -Djavax.net.ssl.trustStore=../test/truststore -Djavax.net.ssl.trustStorePassword=123456"
-CLIENT_KEYS="-Djavax.net.ssl.keyStore=../test/client.keys -Djavax.net.ssl.keyStorePassword=123456 -Djavax.net.ssl.trustStore=../test/truststore -Djavax.net.ssl.trustStorePassword=123456"
+KEYSTORE_PASSWORD="123456"
+TRUSTSTORE_PATH="../test/truststore"
+TRUSTSTORE_PASSWORD="123456"
+SERVER_KEYS_PATH="../test/server.keys"
+CLIENT_KEYS_PATH="../test/client.keys"
+SERVER_KEYS="-Djavax.net.debug=ssl,keymanager -Djavax.net.ssl.keyStore=$SERVER_KEYS_PATH -Djavax.net.ssl.keyStorePassword=$KEYSTORE_PASSWORD -Djavax.net.ssl.trustStore=$TRUSTSTORE_PATH -Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PASSWORD"
+CLIENT_KEYS=                                 "-Djavax.net.ssl.keyStore=$CLIENT_KEYS_PATH -Djavax.net.ssl.keyStorePassword=$KEYSTORE_PASSWORD -Djavax.net.ssl.trustStore=$TRUSTSTORE_PATH -Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PASSWORD"
 CYPHERS="TLS_RSA_WITH_AES_128_CBC_SHA"
 
 test () {
-    echo -en "$1\t"
+    echo -en "$1 ($2)\t"
     expected=$3
     output=$($2)
     if [ $? != 0 ]; then
