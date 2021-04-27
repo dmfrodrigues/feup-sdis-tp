@@ -15,7 +15,7 @@ public class SSLServer {
 
         int         port             = Integer.parseInt(args[0]);
 
-        SSLServerSocket socket = (SSLServerSocket) ((SSLServerSocketFactory) SSLServerSocketFactory.getDefault()).createServerSocket(port);
+        SSLServerSocket socket = (SSLServerSocket) SSLServerSocketFactory.getDefault().createServerSocket(port);
         socket.setNeedClientAuth(true);
         socket.setEnabledCipherSuites(getCypherSuites(args));
 
