@@ -27,12 +27,12 @@ public class SSLClient {
         try {
             socket = (SSLSocket) ssf.createSocket(host, port);
             socket.setEnabledCipherSuites(getCypherSuites(args));
-            socket.startHandshake();
         }
         catch( IOException e) {
             System.err.println("Failed to create SSLSocket: " + e.getMessage());
             return;
         }
+        socket.startHandshake();
         socket.setSoTimeout(TIMEOUT);
 
         socket.startHandshake();
@@ -66,7 +66,6 @@ public class SSLClient {
         else if(args[2].equals("lookup")){
             cyphers.addAll(Arrays.asList(Arrays.copyOfRange(args, 4, args.length)));
         }
-        System.out.println(cyphers);
         return cyphers.toArray(new String[0]);
     }
 
