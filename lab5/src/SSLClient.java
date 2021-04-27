@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.util.Arrays;
 
-public class Client {
+public class SSLClient {
 
     private static final int TIMEOUT = 3000;
     private static final int MAX_MSG_LEN = 1024;

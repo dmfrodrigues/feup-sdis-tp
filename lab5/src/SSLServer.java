@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class Server {
+public class SSLServer {
 
     public static void main(String[] args) throws IOException {
         if(args.length != 1){
