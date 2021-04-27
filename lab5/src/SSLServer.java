@@ -15,18 +15,9 @@ public class SSLServer {
 
         int         port             = Integer.parseInt(args[0]);
 
-        SSLServerSocket socket;
-        SSLServerSocketFactory ssf = (SSLServerSocketFactory) SSLServerSocketFactory.getDefault();
-
-        try {
-            socket = (SSLServerSocket) ssf.createServerSocket(port);
-            socket.setNeedClientAuth(true);
-            socket.setEnabledCipherSuites(getCypherSuites(args));
-        }
-        catch( IOException e) {
-            System.err.println("Failed to create SSLServerSocket: " + e.getMessage());
-            return;
-        }
+        SSLServerSocket socket = (SSLServerSocket) SSLServerSocketFactory.getDefault().createServerSocket();
+        socket.setNeedClientAuth(true);
+        socket.setEnabledCipherSuites(getCypherSuites(args));
 
         WorkRunnable workRunnable = new WorkRunnable(socket);
         workRunnable.run();
@@ -47,10 +38,10 @@ public class SSLServer {
     }
 
     public static class WorkRunnable implements Runnable {
-        private final SSLServerSocket serverSocket;
+        private final ServerSocket serverSocket;
         private final Map<String, Inet4Address> table = new HashMap<>();
 
-        public WorkRunnable(SSLServerSocket serverSocket){
+        public WorkRunnable(ServerSocket serverSocket){
             this.serverSocket = serverSocket;
         }
 
