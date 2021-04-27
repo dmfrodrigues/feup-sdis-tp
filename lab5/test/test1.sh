@@ -5,9 +5,9 @@ TIMEOUT=30
 KEYSTORE_PASSWORD="123456"
 TRUSTSTORE_PATH="../test/truststore"
 TRUSTSTORE_PASSWORD="123456"
-SERVER_KEYS_PATH="../test/server.keys"
-CLIENT_KEYS_PATH="../test/client.keys"
-SERVER_KEYS="-Djavax.net.debug=ssl,keymanager -Djavax.net.ssl.keyStore=$SERVER_KEYS_PATH -Djavax.net.ssl.keyStorePassword=$KEYSTORE_PASSWORD -Djavax.net.ssl.trustStore=$TRUSTSTORE_PATH -Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PASSWORD"
+SERVER_KEYS_PATH="../test/server"
+CLIENT_KEYS_PATH="../test/client"
+SERVER_KEYS="-Djavax.net.ssl.keyStore=$SERVER_KEYS_PATH -Djavax.net.ssl.keyStorePassword=$KEYSTORE_PASSWORD -Djavax.net.ssl.trustStore=$TRUSTSTORE_PATH -Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PASSWORD"
 CLIENT_KEYS="-Djavax.net.ssl.keyStore=$CLIENT_KEYS_PATH -Djavax.net.ssl.keyStorePassword=$KEYSTORE_PASSWORD -Djavax.net.ssl.trustStore=$TRUSTSTORE_PATH -Djavax.net.ssl.trustStorePassword=$TRUSTSTORE_PASSWORD"
 CYPHERS="TLS_AES_256_GCM_SHA384 TLS_AES_128_GCM_SHA256 TLS_CHACHA20_POLY1305_SHA256 TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256"
 
@@ -35,6 +35,7 @@ timeout $TIMEOUT java $SERVER_KEYS SSLServer 4040 $CYPHERS  & PID=$!
 echo "Started server with PID $PID"
 sleep 1
 test "test1-01" "java $CLIENT_KEYS SSLClient localhost 4040 register www.fe.up.pt 192.168.0.1 $CYPHERS" "SSLClient: register www.fe.up.pt 192.168.0.1 : 1"
+sleep 5
 test "test1-02" "java $CLIENT_KEYS SSLClient localhost 4040 register www.fe.up.pt 192.168.0.1 $CYPHERS" "SSLClient: register www.fe.up.pt 192.168.0.1 : 1"
 test "test1-03" "java $CLIENT_KEYS SSLClient localhost 4040 register www.google.com 123.123.123.123 $CYPHERS" "SSLClient: register www.google.com 123.123.123.123 : 2"
 test "test1-04" "java $CLIENT_KEYS SSLClient localhost 4040 register www.google.com 123.123.123.123 $CYPHERS" "SSLClient: register www.google.com 123.123.123.123 : 2"
