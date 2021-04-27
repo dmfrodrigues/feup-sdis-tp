@@ -83,7 +83,7 @@ public class SSLServer {
 
             System.out.println("SSLServer: " + request.toString());
             request.process(this, socket);
-
+            socket.getInputStream().readAllBytes(); // Consume all data; avoids abortive TCP termination
             socket.close();
         }
 

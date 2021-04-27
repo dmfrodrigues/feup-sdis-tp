@@ -67,13 +67,13 @@ public class SSLClient {
         return cyphers.toArray(new String[0]);
     }
 
-    private static void sendRequest(SSLSocket socket, Message msg) throws IOException {
+    private static void sendRequest(Socket socket, Message msg) throws IOException {
         OutputStream os = socket.getOutputStream();
         os.write((msg.toString() + '\n').getBytes());
         os.flush();
     }
 
-    private static String getResponse(SSLSocket socket) throws IOException {
+    private static String getResponse(Socket socket) throws IOException {
         try {
             InputStream is = socket.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
