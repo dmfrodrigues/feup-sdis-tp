@@ -38,4 +38,4 @@ jobs:
       run: |
         cd lab1
         chmod u+x test/*.sh
-        test/test1.sh 2> /dev/null
+        test/test1.sh
