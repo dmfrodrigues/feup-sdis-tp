@@ -1,6 +1,5 @@
 import java.io.*;
 import java.net.*;
-import java.util.Arrays;
 
 public class Client {
 
@@ -21,11 +20,11 @@ public class Client {
         if(args[2].equals("register") && args.length == 5)
         {
             RegisterMessage msg = new RegisterMessage(args[3], args[4]);
-            sendRequest(socket, host, port, msg);
+            sendRequest(socket, msg);
         }
         else if(args[2].equals("lookup")){
             LookupMessage msg = new LookupMessage(args[3]);
-            sendRequest(socket, host, port, msg);
+            sendRequest(socket, msg);
         }
         else{
             System.out.println("Invalid operation");
@@ -39,7 +38,7 @@ public class Client {
         if(response.equals("ERROR")) System.exit(1);
     }
 
-    private static void sendRequest(Socket socket, InetAddress address, int port, Message msg) throws IOException {
+    private static void sendRequest(Socket socket, Message msg) throws IOException {
         OutputStream os = socket.getOutputStream();
         os.write((msg.toString() + '\n').getBytes());
         os.flush();
