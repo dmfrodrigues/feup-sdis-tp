@@ -1,3 +1,5 @@
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -5,7 +7,7 @@ import java.util.*;
 public class SSLServer {
 
     public static void main(String[] args) throws IOException {
-        if(args.length != 1){
+        if(args.length < 1){
             System.out.println("ERROR: not enough arguments");
             System.out.print(getUsage());
             return;
@@ -13,17 +15,25 @@ public class SSLServer {
 
         int         port             = Integer.parseInt(args[0]);
 
-        ServerSocket socket = new ServerSocket(port);
+        SSLServerSocket socket = (SSLServerSocket) SSLServerSocketFactory.getDefault().createServerSocket(port);
+        socket.setNeedClientAuth(true);
+        socket.setEnabledCipherSuites(getCypherSuites(args));
 
         WorkRunnable workRunnable = new WorkRunnable(socket);
         workRunnable.run();
     }
 
+    private static String[] getCypherSuites(String[] args){
+        List<String> cyphers = new ArrayList<>(Arrays.asList(Arrays.copyOfRange(args, 1, args.length)));
+        return cyphers.toArray(new String[0]);
+    }
+
     private static String getUsage(){
         return
             "Usage:\n"+
-            "    java Server PORT\n"+
-            "    PORT   Port number that the server shall use to provide the service\n"
+            "    java SSLServer PORT [CYPHER-SUITE]*\n"+
+            "    PORT            Port number that the server shall use to provide the service\n"+
+            "    [CYPHER-SUITE]* Sequence of strings specifying the combination of cryptographic algorithms the server should use, in order of preference\n"
         ;
     }
 
@@ -62,9 +72,9 @@ public class SSLServer {
                 default -> throw new ProtocolException("Operation " + operation + " not valid");
             };
 
-            System.out.println("Server: " + request.toString());
+            System.out.println("SSLServer: " + request.toString());
             request.process(this, socket);
-
+            socket.getInputStream().readAllBytes(); // Consume all data; avoids abortive TCP termination
             socket.close();
         }
 

@@ -1,10 +1,16 @@
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SSLClient {
 
     private static final int TIMEOUT = 3000;
-    private static final int MAX_MSG_LEN = 1024;
 
     public static void main(String[] args) throws IOException {
         if (args.length < 4) {
@@ -14,10 +20,22 @@ public class SSLClient {
 
         InetAddress host = InetAddress.getByName(args[0]);
         int port = Integer.parseInt(args[1]);
-        Socket socket = new Socket(host, port);
-        socket.setSoTimeout(TIMEOUT);
 
-        if(args[2].equals("register") && args.length == 5)
+        SSLSocket socket;
+        SSLSocketFactory ssf = (SSLSocketFactory) SSLSocketFactory.getDefault();
+
+        try {
+            socket = (SSLSocket) ssf.createSocket(host, port);
+            socket.setEnabledCipherSuites(getCypherSuites(args));
+        }
+        catch( IOException e) {
+            System.err.println("Failed to create SSLSocket: " + e.getMessage());
+            return;
+        }
+        socket.setSoTimeout(TIMEOUT);
+        socket.startHandshake();
+
+        if(args[2].equals("register"))
         {
             RegisterMessage msg = new RegisterMessage(args[3], args[4]);
             sendRequest(socket, msg);
@@ -38,6 +56,17 @@ public class SSLClient {
         if(response.equals("ERROR")) System.exit(1);
     }
 
+    private static String[] getCypherSuites(String[] args){
+        List<String> cyphers = new ArrayList<>();
+        if(args[2].equals("register")){
+            cyphers.addAll(Arrays.asList(Arrays.copyOfRange(args, 5, args.length)));
+        }
+        else if(args[2].equals("lookup")){
+            cyphers.addAll(Arrays.asList(Arrays.copyOfRange(args, 4, args.length)));
+        }
+        return cyphers.toArray(new String[0]);
+    }
+
     private static void sendRequest(Socket socket, Message msg) throws IOException {
         OutputStream os = socket.getOutputStream();
         os.write((msg.toString() + '\n').getBytes());
@@ -56,13 +85,14 @@ public class SSLClient {
 
     private static void printResult(String[] args, String response){
         if(args[2].equals("register"))
-            System.out.println("Client: "+ args[2] + " " + args[3] + " " + args[4] + " : "+ response);
+            System.out.println("SSLClient: "+ args[2] + " " + args[3] + " " + args[4] + " : "+ response);
         else if(args[2].equals("lookup"))
-            System.out.println("Client: "+ args[2] + " " + args[3] + " : "+ response);
+            System.out.println("SSLClient: "+ args[2] + " " + args[3] + " : "+ response);
     }
 
     private static String getUsage(){
-        return "Usage: java Client <host> <port> register <DNS name> <IP address>\n" +
-                "       java Client <host> <port> lookup <DNS name>";
+        return "Usage: java SSLClient <host> <port> register <DNS name> <IP address> [CYPHER-SUITE]*\n" +
+                "      java SSLClient <host> <port> lookup <DNS name> [CYPHER-SUITE]*"+
+                "      [CYPHER-SUITE]* Sequence of strings specifying the combination of cryptographic algorithms the server should use, in order of preference\n";
     }
 }
