@@ -32,9 +32,7 @@ public class SSLClient {
             System.err.println("Failed to create SSLSocket: " + e.getMessage());
             return;
         }
-        socket.startHandshake();
         socket.setSoTimeout(TIMEOUT);
-
         socket.startHandshake();
 
         if(args[2].equals("register"))
