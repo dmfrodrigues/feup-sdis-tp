@@ -34,7 +34,6 @@ public class SSLServer {
 
     private static String[] getCypherSuites(String[] args){
         List<String> cyphers = new ArrayList<>(Arrays.asList(Arrays.copyOfRange(args, 1, args.length)));
-        System.out.println(cyphers);
         return cyphers.toArray(new String[0]);
     }
 
@@ -79,7 +78,7 @@ public class SSLServer {
                 System.err.println("SSLServer: got exception");
                 e.printStackTrace();
             }
-
+            if(data==null) return;
             String[] data_split = data.split(" ");
             String operation = data_split[0];
             RequestMessage request = switch (operation) {

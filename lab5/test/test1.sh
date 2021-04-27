@@ -31,11 +31,10 @@ test () {
 }
 
 cd bin
-timeout $TIMEOUT java $SERVER_KEYS SSLServer 4040 $CYPHERS  & PID=$!
+timeout $TIMEOUT java $SERVER_KEYS SSLServer 4040 $CYPHERS > /dev/null  & PID=$!
 echo "Started server with PID $PID"
 sleep 1
 test "test1-01" "java $CLIENT_KEYS SSLClient localhost 4040 register www.fe.up.pt 192.168.0.1 $CYPHERS" "SSLClient: register www.fe.up.pt 192.168.0.1 : 1"
-sleep 5
 test "test1-02" "java $CLIENT_KEYS SSLClient localhost 4040 register www.fe.up.pt 192.168.0.1 $CYPHERS" "SSLClient: register www.fe.up.pt 192.168.0.1 : 1"
 test "test1-03" "java $CLIENT_KEYS SSLClient localhost 4040 register www.google.com 123.123.123.123 $CYPHERS" "SSLClient: register www.google.com 123.123.123.123 : 2"
 test "test1-04" "java $CLIENT_KEYS SSLClient localhost 4040 register www.google.com 123.123.123.123 $CYPHERS" "SSLClient: register www.google.com 123.123.123.123 : 2"

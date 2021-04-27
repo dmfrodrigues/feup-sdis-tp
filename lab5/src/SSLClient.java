@@ -27,6 +27,7 @@ public class SSLClient {
         try {
             socket = (SSLSocket) ssf.createSocket(host, port);
             socket.setEnabledCipherSuites(getCypherSuites(args));
+            socket.startHandshake();
         }
         catch( IOException e) {
             System.err.println("Failed to create SSLSocket: " + e.getMessage());
@@ -36,7 +37,7 @@ public class SSLClient {
 
         socket.startHandshake();
 
-        if(args[2].equals("register") && args.length == 5)
+        if(args[2].equals("register"))
         {
             RegisterMessage msg = new RegisterMessage(args[3], args[4]);
             sendRequest(socket, msg);
@@ -69,13 +70,13 @@ public class SSLClient {
         return cyphers.toArray(new String[0]);
     }
 
-    private static void sendRequest(Socket socket, Message msg) throws IOException {
+    private static void sendRequest(SSLSocket socket, Message msg) throws IOException {
         OutputStream os = socket.getOutputStream();
         os.write((msg.toString() + '\n').getBytes());
         os.flush();
     }
 
-    private static String getResponse(Socket socket) throws IOException {
+    private static String getResponse(SSLSocket socket) throws IOException {
         try {
             InputStream is = socket.getInputStream();
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
