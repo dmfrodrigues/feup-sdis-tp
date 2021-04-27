@@ -89,6 +89,8 @@ public class SSLServer {
 
             System.out.println("SSLServer: " + request.toString());
             request.process(this, socket);
+
+            socket.close();
         }
 
         public void register(String dns, Inet4Address address){
