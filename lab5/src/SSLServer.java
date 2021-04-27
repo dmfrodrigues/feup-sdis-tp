@@ -64,6 +64,8 @@ public class Server {
 
             System.out.println("Server: " + request.toString());
             request.process(this, socket);
+
+            socket.close();
         }
 
         public void register(String dns, Inet4Address address){
