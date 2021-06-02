@@ -1,4 +1,4 @@
-name: test-lab1
+name: test-lab5
 
 on:
   push:
@@ -29,13 +29,13 @@ jobs:
     
     - name: Compile
       run: |
-        cd lab1
+        cd lab5
         mkdir bin
         cd bin
         javac ../src/*.java -d .
 
     - name: Test
       run: |
-        cd lab1
+        cd lab5
         chmod u+x test/*.sh
         test/test1.sh
