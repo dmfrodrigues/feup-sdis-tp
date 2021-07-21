@@ -1,5 +1,7 @@
 # SDIS practical assignments
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 [![test-lab1](https://github.com/dmfrodrigues/feup-sdis-tp/actions/workflows/test-lab1.yml/badge.svg)](https://github.com/dmfrodrigues/feup-sdis-tp/actions/workflows/test-lab1.yml)
 [![test-lab2](https://github.com/dmfrodrigues/feup-sdis-tp/actions/workflows/test-lab2.yml/badge.svg)](https://github.com/dmfrodrigues/feup-sdis-tp/actions/workflows/test-lab2.yml)
 [![test-lab3](https://github.com/dmfrodrigues/feup-sdis-tp/actions/workflows/test-lab3.yml/badge.svg)](https://github.com/dmfrodrigues/feup-sdis-tp/actions/workflows/test-lab3.yml)
