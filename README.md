@@ -8,6 +8,9 @@
 [![test-lab4](https://github.com/dmfrodrigues/feup-sdis-tp/actions/workflows/test-lab4.yml/badge.svg)](https://github.com/dmfrodrigues/feup-sdis-tp/actions/workflows/test-lab4.yml)
 [![test-lab5](https://github.com/dmfrodrigues/feup-sdis-tp/actions/workflows/test-lab5.yml/badge.svg)](https://github.com/dmfrodrigues/feup-sdis-tp/actions/workflows/test-lab5.yml)
 
+- **Institution:** [FEUP](https://sigarra.up.pt/feup/en/web_page.Inicial)
+- **Course:** [SDIS](https://sigarra.up.pt/feup/en/UCURR_GERAL.FICHA_UC_VIEW?pv_ocorrencia_id=459489) (Distributed Systems)
+
 ## Index
 
 - [Lab1](lab1)
